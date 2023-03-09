@@ -2,7 +2,7 @@ class PacketHandler {
 public:
     PacketHandler(Firewall &firewall) : firewall(firewall) {}
 
-    bool handle_incoming_packet(char *src_mac, int src_mac_len, char *packet, int packet_len,Policy p) {
+    bool handle_incoming_packet(char *src_mac, int src_mac_len, char *packet, int packet_len) {
         char *ip_packet = packet + src_mac_len + sizeof(struct ether_header);
         struct iphdr *iph = (struct iphdr *) ip_packet;
         char *tcp_packet = ip_packet + (iph->ihl * 4);
@@ -15,7 +15,7 @@ public:
         int src_port = ntohs(tcph->source);
         int dst_port = ntohs(tcph->dest);
        std::cout<<src_ip<<std::endl<< dst_ip<<std::endl<< src_port<<std::endl<< dst_port<<std::endl;
-        if (firewall.filterPacket(src_ip, dst_ip, src_port, dst_port,p)) {
+        if (firewall.filterPacket(src_ip, dst_ip, src_port, dst_port)) {
         printf("Packet accepted.\n");
         return true;
         } else {
