@@ -26,7 +26,7 @@ public:
         // Analyse la ligne pour récupérer les attributs de la règle
         std::istringstream iss(line);
        
-        std::cout << "Ligne lue : " << line << std::endl;
+       // std::cout << "Ligne lue : " << line << std::endl;
 
         if (iss >> srcIP >> destIP >> srcPort >> destPort >> std::boolalpha >> permit) {
             // Création d'un nouvel objet Rule avec les attributs récupérés
