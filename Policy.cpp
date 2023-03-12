@@ -1,16 +1,8 @@
-#include <vector>
-#include<iostream>
-#include "Rule.cpp"
+#include "Policy.h"
 #include <sstream> // nécessaire pour utiliser std::istringstream
 #include <fstream> // nécessaire pour lire un fichier
 
-class Policy
-{
-
-public:
-   std::vector<Rule> rules;
-
-    Policy() {
+Policy::Policy() {
     // Ouverture du fichier
     std::ifstream file("rules.txt");
     if (!file.is_open()) {
@@ -26,7 +18,7 @@ public:
         // Analyse la ligne pour récupérer les attributs de la règle
         std::istringstream iss(line);
        
-        std::cout << "Ligne lue : " << line << std::endl;
+       // std::cout << "Ligne lue : " << line << std::endl;
 
         if (iss >> srcIP >> destIP >> srcPort >> destPort >> std::boolalpha >> permit) {
             // Création d'un nouvel objet Rule avec les attributs récupérés
@@ -47,11 +39,6 @@ public:
 }
 
 
- void addRule(Rule r) {
-        
-        Policy p;
-        p.rules.push_back(r);
-    }
-};
-
-
+void Policy::addRule(Rule r) {
+    rules.push_back(r);
+}

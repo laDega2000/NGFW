@@ -7,7 +7,8 @@
 #include <netinet/tcp.h>
 #include <netinet/ether.h>
 #include "Firewall.cpp"
-#include "PacketHandler.cpp"
+
+
 
 
 int main(int argc, char *argv[]) {
@@ -23,14 +24,13 @@ if (!handle) {
 }
 
 Firewall firewall;
-PacketHandler packet_handler(firewall);
 
 struct pcap_pkthdr *header;
 const u_char *packet;
-Policy p;
+
 while (int returnValue = pcap_next_ex(handle, &header, &packet) >= 0) {
     if (returnValue == 0) continue;
-    if (packet_handler.handle_incoming_packet((char *) packet, header->len, (char *) packet, header->len,p)) {
+    if (firewall.handle_incoming_packet((char *) packet, header->len, (char *) packet, header->len)) {
         // packet is allowed
     } else {
         // packet is dropped
