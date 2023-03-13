@@ -11,7 +11,7 @@ class Policy
 public:
    std::vector<Rule> rules;
 
-    //Policy();
+    Policy();
     void addRule(Rule r);
 };
 

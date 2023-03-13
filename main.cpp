@@ -11,6 +11,8 @@
 
 
 
+
+
 int main(int argc, char *argv[]) {
 if (argc < 2) {
 printf("Usage: %s <pcap_file>\n", argv[0]);
@@ -24,13 +26,14 @@ if (!handle) {
 }
 
 Firewall firewall;
-
+    Policy p;
+    tabses s;
 struct pcap_pkthdr *header;
 const u_char *packet;
 
 while (int returnValue = pcap_next_ex(handle, &header, &packet) >= 0) {
     if (returnValue == 0) continue;
-    if (firewall.handle_incoming_packet((char *) packet, header->len, (char *) packet, header->len)) {
+    if (firewall.handle_incoming_packet((char *) packet, header->len, (char *) packet, header->len,p,s)) {
         // packet is allowed
     } else {
         // packet is dropped

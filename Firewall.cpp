@@ -14,11 +14,10 @@ class Firewall
 public:
     Firewall() {}
    
-    Policy p;
-    tabses s;
+    
 
 
-    bool handle_incoming_packet(char *src_mac, int src_mac_len, char *packet, int packet_len) {
+    bool handle_incoming_packet(char *src_mac, int src_mac_len, char *packet, int packet_len,Policy p,tabses s) {
         char *ip_packet = packet + src_mac_len + sizeof(struct ether_header);
         struct iphdr *iph = (struct iphdr *) ip_packet;
         char *tcp_packet = ip_packet + (iph->ihl * 4);
@@ -35,10 +34,11 @@ public:
 
 
 
-
-       filtrage filtrages;
-       Securite_Context Context(&filtrages);
-        if (Context.execute_strategy(src_ip, dst_ip, src_port, dst_port,p,s)) {
+        strategieSEC* obj=new filtrage;
+        Securite_Context context;
+        
+        context.set_strategy(obj);
+        if (context.execute_strategy(src_ip, dst_ip, src_port, dst_port,p,s)) {
         printf("Packet accepted.\n");
         return true;
         } else {
