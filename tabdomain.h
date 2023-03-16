@@ -1,0 +1,13 @@
+
+class tabdomain
+{
+ 
+public:
+    tabdomain();
+
+    
+};
+
+
+
+
