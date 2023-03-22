@@ -7,9 +7,9 @@
 #include "tabses.h"
 #include "tabdomain.h"
 
-class strategieSEC {
+class strategieRTG {
 public:
-    virtual bool execute(char *src_mac, int src_mac_len, char *packet, int packet_len, Policy& p, tabses& s,tabdomain& tab)=0;
+    virtual bool route(char *src_mac, int src_mac_len, char *packet, int packet_len)=0;
 };
 
 #endif // STRATEGIE_SEC_H

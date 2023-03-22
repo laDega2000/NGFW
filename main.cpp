@@ -6,7 +6,9 @@
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 #include <netinet/ether.h>
-#include "Firewall.cpp"
+#include "interfaces.h"
+
+
 
 
 
@@ -23,18 +25,14 @@ if (!handle) {
     return 1;
 }
 
-Firewall firewall;
 
+    
 struct pcap_pkthdr *header;
 const u_char *packet;
-
+interfaces i;
 while (int returnValue = pcap_next_ex(handle, &header, &packet) >= 0) {
     if (returnValue == 0) continue;
-    if (firewall.handle_incoming_packet((char *) packet, header->len, (char *) packet, header->len)) {
-        // packet is allowed
-    } else {
-        // packet is dropped
-    }
+    i.receive(packet,header);
 }
 
 return 0;
