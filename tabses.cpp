@@ -18,7 +18,7 @@ tabses::tabses()
         // Analyse la ligne pour récupérer les attributs de la session
         std::istringstream iss(line);
         
-        std::cout << "Ligne lue : " << line << std::endl;
+       // std::cout << "Ligne lue : " << line << std::endl;
 
         if (iss >> srcIP >> destIP >> srcPort >> destPort >> state) {
             // Création d'un nouvel objet session avec les attributs récupérés
