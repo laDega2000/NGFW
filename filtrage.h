@@ -1,11 +1,20 @@
 #ifndef FILTRAGE_H
 #define FILTRAGE_H
-
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
+#include <netinet/ether.h>
+#include <pcap.h>
 #include "strategieSEC.h"
-
+#include "tabses.h"
+#include "session.h"
+#include "filtrage.h"
+#include "monitoring.h"
+#include "tabdomain.h"
 class filtrage : public strategieSEC {
 public:
-    bool execute(std::string srcIP, std::string destIP, int srcPort, int destPort, Policy p, tabses s) override;
+    filtrage();
+    strategieSEC* get_strategy();
+    bool execute( char *packet, int packet_len, Policy& p, tabses& s,tabdomain& tab) override;
 };
 
 #endif // FILTRAGE_H
