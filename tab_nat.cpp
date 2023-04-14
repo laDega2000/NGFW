@@ -1,17 +1,16 @@
-#include "Policy.h"
-#include <sstream> // nécessaire pour utiliser std::istringstream
-#include <fstream> // nécessaire pour lire un fichier
+#include "tab_nat.h"
 
-Policy::Policy() {
-    // Ouverture du fichier
-    std::ifstream file("rules.txt");
+tab_nat::tab_nat()
+{
+     // Créer une nouvelle table de routage statique
+     // Ouverture du fichier
+    std::ifstream file("nat.txt");
     if (!file.is_open()) {
         std::cerr << "Error opening file" << std::endl;
         return;
     }
-        std::string srcIP, destIP;
-        int srcPort, destPort;
-        bool permit;
+        std::string prive, publi;
+       
     // Récupération des règles depuis un fichier
     std::string line;
     while (std::getline(file, line)) {
@@ -20,17 +19,19 @@ Policy::Policy() {
        
        // std::cout << "Ligne lue : " << line << std::endl;
 
-        if (iss >> srcIP >> destIP >> srcPort >> destPort >> std::boolalpha >> permit) {
+        if (iss >> prive >> publi ) {
             // Création d'un nouvel objet Rule avec les attributs récupérés
-            Rule rule(srcIP,destIP,srcPort ,destPort,permit);
+            tab_nat_stat ta;
+            ta.ip_prive=prive;
+            ta.ip_public=publi;
            //std::cout<< rule.destIP<<rule.destPort<<rule.srcIP;
             // Ajout de la nouvelle règle au vecteur rules de la classe Policy
-            rules.push_back(rule);
+            tabn.push_back(ta);
             //for (Rule r : rules) {
             //std::cout<<r.srcIP<<std::endl;
             //}
         } else {
-            std::cerr << "Error parsing rule: " << line << std::endl;
+            std::cerr << "Error parsing nat: " << line << std::endl;
         }
     }
 
@@ -38,10 +39,3 @@ Policy::Policy() {
     file.close();
 }
 
-
-void Policy::addRule(Rule r) {
-    rules.push_back(r);
-}
-/*void Policy::supRule(Rule rr) {
-    rules.pop_back(rr);
-}*/
