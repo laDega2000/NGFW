@@ -1,24 +1,55 @@
 #include "filtrage.h"
 
-bool filtrage::execute(std::string srcIP, std::string destIP, int srcPort, int destPort, Policy p, tabses s) {
-    if(s.isPacketInSession(srcIP, destIP, srcPort, destPort)) {
+filtrage::filtrage() {}
+
+strategieSEC* filtrage::get_strategy() {
+    return new filtrage();
+}
+
+bool filtrage::execute( packet pac, inter_conf* p, tabses& s,tabdomain &tab) {
+    
+       monitoring m;
+    
+    if (s.isPacketInSession(pac.src_ip,pac.dst_ip,pac.src_port, pac.dst_port)) {
         printf("Paquet appartient déjà à une session.\n");
+        std::string deg=pac.src_ip;
+        std::string s_log = "Packet accepted. Source IP: " + deg + " Destination IP: " + pac.dst_ip + ".";
+        m.set_log("INFO", s_log);
         return true;
     } else {
-        for (Rule r : p.rules) {
-            if (srcIP == r.srcIP && destIP == r.destIP && srcPort == r.srcPort && destPort == r.destPort && r.permit) {
-                printf("Paquet autorisé : règle correspondante.\n");
-                session se(srcIP, destIP, srcPort, destPort, "Etablie");
-                s.addSession(se);
-                return true;
-            } else if (srcIP == r.srcIP && destIP == r.destIP && srcPort == r.srcPort && destPort == r.destPort && !r.permit) {
-                printf("Paquet rejeté : règle correspondante.\n");
-                return false;
-            } else {
-                printf("Paquet rejeté : aucune règle correspondante.\n");
-                return false;
+       
+        bool ruleMatched = false;
+        //base pp=p->get("dega");
+       base bb;
+        //bb.rules=pp->rules;
+        for (Rule r : p->get("dega",bb).rules) {
+            if (((pac.src_zone.type==r.src_zo)&&(pac.dst_zone.type==r.dst_zo))||(pac.src_ip == r.srcIP || pac.src_ip=="ANY") && (pac.dst_ip == r.destIP || pac.dst_ip=="ANY") && pac.src_port == r.srcPort && pac.dst_port == r.destPort) {
+                if (r.permit) {
+                    printf("Paquet autorisé : règle correspondante.\n");
+                    session se(pac.src_ip, pac.dst_ip, pac.src_port, pac.dst_port, "Etablie");
+                    s.addSession(se);
+                    std::string deg=pac.src_ip;
+                    std::string s_log = "Packet accepted. Source IP: " + deg + " Destination IP: " + pac.dst_ip + ".";
+                     m.set_log("INFO", s_log);
+                    return true;
+                } else {
+                    printf("Paquet rejeté : règle correspondante.\n");
+                     std::string deg=pac.src_ip;
+                      std::string s_log = "Packet Rejeter. Source IP: " + deg + " Destination IP: " + pac.dst_ip + ".";
+                     m.set_log("WARNIING", s_log);
+                    return false;
+                }
+                ruleMatched = true;
+                break;
             }
         }
-        return false;
+        if (!ruleMatched) {
+            printf("Paquet rejeté : aucune règle correspondante.\n");
+             std::string deg=pac.src_ip;
+            std::string s_log = "Packet Rejeter. Source IP: " + deg + " Destination IP: " + pac.dst_ip + ".";
+             m.set_log("WARNIING", s_log);
+            return false;
+        }
     }
+    
 }

@@ -8,44 +8,81 @@
 #include <netinet/ether.h>
 #include <pcap.h>
 #include "filtrage.h"
-//#include "strategieSEC.h"
+#include "filtrurl.h"
+#include "tabdomain.h"
+#include "interfaces.h"
+#include "Routage_Context.h"
+#include "routage_stat.h"
+#include "tab_route.h"
+#include "nat.h"
+#include "configuration.h"
+#include "inter_conf.h"
+#include "base.h"
+#include "groupe.h"
+
 class Firewall
 {
 public:
-    Firewall() {}
-   
-    Policy p;
+    inter_conf* j;
+    
     tabses s;
+    tabdomain tab;
 
-
-    bool handle_incoming_packet(char *src_mac, int src_mac_len, char *packet, int packet_len) {
-        char *ip_packet = packet + src_mac_len + sizeof(struct ether_header);
-        struct iphdr *iph = (struct iphdr *) ip_packet;
-        char *tcp_packet = ip_packet + (iph->ihl * 4);
-        struct tcphdr *tcph = (struct tcphdr *) tcp_packet;
-
-        char src_ip[INET_ADDRSTRLEN];
-        char dst_ip[INET_ADDRSTRLEN];
-        inet_ntop(AF_INET, &iph->saddr, src_ip, INET_ADDRSTRLEN);
-        inet_ntop(AF_INET, &iph->daddr, dst_ip, INET_ADDRSTRLEN);
-        int src_port = ntohs(tcph->source);
-        int dst_port = ntohs(tcph->dest);
-       std::cout<<src_ip<<std::endl<< dst_ip<<std::endl<< src_port<<std::endl<< dst_port<<std::endl;
-
-
-
-
-
-       filtrage filtrages;
-       Securite_Context Context(&filtrages);
-        if (Context.execute_strategy(src_ip, dst_ip, src_port, dst_port,p,s)) {
-        printf("Packet accepted.\n");
-        return true;
-        } else {
+    Firewall() {
+      
+      //this->j->add("dega");
+    }
+   
+    bool handle_incoming_packet(packet pac) {
+         
+        strategieSEC* obj=new filtrage;
+        Securite_Context context;
         
-        return false;
+        context.set_strategy(obj);
+        this->j=new configuration;
+       if (context.execute_strategy(pac,j, s,tab)==true) {
+           // printf("Packet accepted.\n");
+           return true;
         }
-        }
+         else {
+            //printf("Packet rejected.\n");
+            return false;
+          }
+
+    }
+
+
+
+    void get_packet(){
+      //printf("bdiit");
+
+      struct pcap_pkthdr *header;
+      interfaces i;
+      int x=1;
+      bool var;
+     // printf("ha nadkhol");
+
+      while(true){
+      packet pac(i.receive(x));
+      //printf("jabtouuu");
+      var=handle_incoming_packet(pac);
+      x++;
+      if(var==true)
+      {
+        strategieRTG* ob=new routage_stat;
+        Routage_Context cont;
+        tab_route r;
+        tab_nat t;
+        cont.set_strategy(ob);
+        cont.execute_strategy(pac, r,t);
+        ob=new nat;
+        cont.set_strategy(ob);
+        cont.execute_strategy(pac,r,t);
+      }
+      }
+    }
+
+    
     //void supr (string srcIP, string destIP, int srcPort, int destPort, bool permit){}
     
    

@@ -1,0 +1,5 @@
+start.parrotsec.org
+parrotsec.org
+SAMBA.WINDOWS8.PRIVATE
+_ldap._tcp.dc._msdcs.S4DOM.PRIVATE
+ocsp.verisign.net
