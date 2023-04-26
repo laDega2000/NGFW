@@ -4,14 +4,15 @@
 #include <vector>
 #include <iostream>
 #include "Rule.h"
-
-class Policy
+#include "base.h"
+class Policy : public base
 {
 
 public:
    std::vector<Rule> rules;
-
-    //Policy();
+    std::string name;
+   // void supRule(Rule rr);
+    Policy();
     void addRule(Rule r);
 };
 
