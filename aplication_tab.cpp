@@ -1,19 +1,18 @@
-#include "Policy.h"
+#include  "aplication_tab.h"
+#include <iostream>
 #include <sstream> // nécessaire pour utiliser std::istringstream
 #include <fstream> // nécessaire pour lire un fichier
-
-Policy::Policy() {
-    // Ouverture du fichier
-    std::ifstream file("rules.txt");
+aplication_tab::aplication_tab(/* args */)
+{
+     // Ouverture du fichier
+    std::ifstream file("application.txt");
     if (!file.is_open()) {
         std::cerr << "Error opening file" << std::endl;
         return;
     }
          
-        std::string srcIP, destIP,zs,zd;
-        user uu;
-        int srcPort, destPort;
-        bool permit;
+        std::string name;
+        
     // Récupération des règles depuis un fichier
     std::string line;
     while (std::getline(file, line)) {
@@ -22,12 +21,12 @@ Policy::Policy() {
        
        // std::cout << "Ligne lue : " << line << std::endl;
 
-        if (iss >> zs >> zd >> srcIP >> destIP >> srcPort >> destPort >> uu.name >> std::boolalpha >> permit) {
+        if (iss >> name ) {
             // Création d'un nouvel objet Rule avec les attributs récupérés
-            Rule rule(uu.name,zs,zd,srcIP,destIP,srcPort ,destPort,permit);
+            aplication app(name);
            //std::cout<< rule.destIP<<rule.destPort<<rule.srcIP;
             // Ajout de la nouvelle règle au vecteur rules de la classe Policy
-            rules.push_back(rule);
+            app_tab.push_back(app);
             //for (Rule r : rules) {
             //std::cout<<r.srcIP<<std::endl;
             //}
@@ -40,10 +39,3 @@ Policy::Policy() {
     file.close();
 }
 
-
-void Policy::addRule(Rule r) {
-    rules.push_back(r);
-}
-/*void Policy::supRule(Rule rr) {
-    rules.pop_back(rr);
-}*/

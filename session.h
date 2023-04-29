@@ -12,6 +12,7 @@ public:
     std::string state;
 
     session(std::string src_ip, std::string dst_ip, int src_port, int dst_port, std::string state);
+    session();
 };
 
 #endif
