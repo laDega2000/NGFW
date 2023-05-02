@@ -1,8 +1,9 @@
-#include "tabses.h"
-
-tabses::tabses()
-{
-    // Ouverture du fichier
+#include "session_conf.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+session_conf::session_conf(/* args */){
+   // Ouverture du fichier
     std::ifstream file("session.txt");
     if (!file.is_open()) {
         std::cerr << "Error opening file" << std::endl;
@@ -24,7 +25,7 @@ tabses::tabses()
             // Création d'un nouvel objet session avec les attributs récupérés
             session session(srcIP, destIP, srcPort, destPort, state);
             // Ajout de la nouvelle session au vecteur sessions de la classe tabses
-            sessions.push_back(session);
+            ses_tab.push_back(session);
         } else {
             std::cerr << "Error parsing session: " << line << std::endl;
         }
@@ -32,25 +33,40 @@ tabses::tabses()
 
     // Fermeture du fichier
     file.close();
-}
+ }
 
-void tabses::addSession(session newSession) {
-    // Ouverture du fichier en mode "append"
-    std::ofstream file("session.txt", std::ios::app);
-    if (!file.is_open()) {
-        std::cerr << "Error opening file" << std::endl;
-        return;
+ base session_conf::get(string ss,base bo){
+    for(session po : ses_tab){
+        
+        bo.tab_session.push_back(po);
+           
+    }return bo;
     }
 
-    // Ajout de la nouvelle session à la fin du fichier
-    file << newSession.src_ip << " " << newSession.dst_ip << " "
-         << newSession.src_port << " " << newSession.dst_port << " "
-         << newSession.state << std::endl;
-    sessions.push_back(newSession);
+    void session_conf::add(std::string ss){
+           
+    }
 
-    std::cout << "Nouvelle session créée" << std::endl;
+   /* base* session_conf::get(){
 
-    // Fermeture du fichier
-    file.close();
-}
-
+    }*/
+    base session_conf::get_all(base b){
+        for(session po : ses_tab){
+            
+                b.tab_session.push_back(po);
+            
+        }return b;}
+   void session_conf::update(base rr,std::string nom){
+       
+            
+            ses_tab.push_back(rr.s);
+    }
+   /* void session_conf::set_sup_session(Rule rr,string nom){
+        for(session po : ses_tab){
+        if(po.name==nom)
+        {
+            po.;
+            
+        }else{printf("pas de ses_tabtique correspendante");}
+    }
+    }*/
