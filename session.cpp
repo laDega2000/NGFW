@@ -7,3 +7,7 @@ session::session(std::string src_ip, std::string dst_ip, int src_port, int dst_p
     this->src_ip = src_ip;
     this->dst_ip = dst_ip;
 }
+
+session::session(){
+    
+}
