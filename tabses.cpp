@@ -18,7 +18,7 @@ tabses::tabses()
         // Analyse la ligne pour récupérer les attributs de la session
         std::istringstream iss(line);
         
-        std::cout << "Ligne lue : " << line << std::endl;
+       // std::cout << "Ligne lue : " << line << std::endl;
 
         if (iss >> srcIP >> destIP >> srcPort >> destPort >> state) {
             // Création d'un nouvel objet session avec les attributs récupérés
@@ -54,12 +54,3 @@ void tabses::addSession(session newSession) {
     file.close();
 }
 
-bool tabses::isPacketInSession(std::string srcIP, std::string destIP, int srcPort, int destPort)
-{
-    for (session s : sessions) {
-        if (s.src_ip == srcIP && s.dst_ip == destIP && s.src_port == srcPort && s.dst_port == destPort) {
-            return true;
-        }
-    }
-    return false;
-}

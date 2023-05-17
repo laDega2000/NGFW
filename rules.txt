@@ -1,4 +1,7 @@
-0.0.0.0 0.0.0.0 0 0 true
-147.234.1.253 147.234.1.253 2679 21 true
-147.234.1.253 192.168.1.2 21 2720 true
-192.168.1.2 147.137.21.94 2717 445 true
+trust untrust 192.168.1.2 147.234.1.253 2720 21 ANY true
+trust untrust 192.168.1.255 217.168.1.2 137 137 ANY true
+trust untrust 192.168.1.2 212.242.33.35 5060 5060 ANY true
+untrust trust 212.242.33.35 192.168.1.2 5060 5060 ANY true
+untrust untrust 110.189.192.168 1.2.0.0 1 2048 ANY true
+untrust trust 147.234.1.253 192.168.1.2 21 2720 ANY true
+trust untrust 192.168.1.2 147.234.1.253 2720 21 ANY true
